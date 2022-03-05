@@ -1,6 +1,7 @@
 package it.itsuptoyou.collection;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -30,4 +31,8 @@ public class Account {
 	private String password;
 	@Indexed
 	private String fullName;
+	
+	private List<Authority> authorities;
+	
+	
 }

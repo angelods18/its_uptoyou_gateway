@@ -6,4 +6,5 @@ import it.itsuptoyou.collection.Account;
 
 public interface AccountRepository extends MongoRepository<Account,String>{
 
+	Account findByUsername(String username);
 }
