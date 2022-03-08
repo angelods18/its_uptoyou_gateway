@@ -42,10 +42,17 @@ public class JwtTokenUtil implements Serializable{
 
     @Autowired
     ObjectMapper objectMapper;
+    
+    @Value("${jwt.prefix}")
+    private String prefix;
 
     @Value("${jwt.expiration}")
     private Long expiration;
 	
+    public String trimToken(String token) {
+    	return token.replace(prefix, "").trim();
+    }
+    
     public String getUsernameFromToken(String token) {
     	String username;
     	try {
@@ -169,12 +176,13 @@ public class JwtTokenUtil implements Serializable{
 
     String generateToken(Map<String, Object> claims) {
         ObjectMapper mapper = new ObjectMapper();
-
-        return Jwts.builder()
+        Date expirationDate= generateExpirationDate();
+        String generatedToken = Jwts.builder()
                 .setClaims(claims)
-                .setExpiration(generateExpirationDate())
+                .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
+        return generatedToken;
     }
  
     public Boolean canTokenBeRefreshed(String token) {

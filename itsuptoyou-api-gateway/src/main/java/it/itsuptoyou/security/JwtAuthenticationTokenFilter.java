@@ -35,6 +35,7 @@ public class JwtAuthenticationTokenFilter  extends OncePerRequestFilter{
 		UserDetails userDetails = null;
 		
 		if(authToken != null) {
+			authToken=jwtTokenUtil.trimToken(authToken);
 			userDetails = jwtTokenUtil.getUserDetails(authToken);
 		}
 		

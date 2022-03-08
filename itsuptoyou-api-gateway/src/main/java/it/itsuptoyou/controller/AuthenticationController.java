@@ -69,9 +69,10 @@ public class AuthenticationController {
 	@RequestMapping(value = "protected/refresh-token", method = RequestMethod.GET)
     public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request, HttpServletResponse response) {
         String token = request.getHeader(tokenHeader);
+        token=jwtTokenUtil.trimToken(token);
         UserDetails userDetails =
                 (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+        
         if (jwtTokenUtil.canTokenBeRefreshed(token)) {
             String refreshedToken = jwtTokenUtil.refreshToken(token);
             response.setHeader(tokenHeader,refreshedToken);
