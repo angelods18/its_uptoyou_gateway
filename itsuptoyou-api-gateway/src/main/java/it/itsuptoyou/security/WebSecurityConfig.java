@@ -85,7 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                         "/**/*.js")
 			.permitAll()
 			.antMatchers("/public/**").permitAll()
-			.antMatchers("/ping").permitAll()
+			.antMatchers("/management-service/public/**").permitAll()	//definire per quali url serve l'autenticazione e per quali no
 			.anyRequest().authenticated();
 		
 		http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
