@@ -29,9 +29,7 @@ public class Account {
 	@Indexed(unique=true)
 	private String username;
 	private String password;
-	@Indexed
-	private String fullName;
-	
+		
 	private List<Authority> authorities;
 	
 	
