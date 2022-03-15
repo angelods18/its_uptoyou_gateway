@@ -15,8 +15,8 @@ import lombok.Data;
 @Document(collection="users")
 public class Account {
 
-	@Id
-	private String accountId;
+	@Indexed(unique=true)
+	private String userId;
 	
 	@CreatedDate
 	private LocalDateTime creationDate;
