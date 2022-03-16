@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.netflix.zuul.context.RequestContext;
+
 public class JwtAuthenticationTokenFilter  extends OncePerRequestFilter{
 
 	@Autowired
@@ -37,6 +39,7 @@ public class JwtAuthenticationTokenFilter  extends OncePerRequestFilter{
 		if(authToken != null) {
 			authToken=jwtTokenUtil.trimToken(authToken);
 			userDetails = jwtTokenUtil.getUserDetails(authToken);
+			propagateUserIdentity(userDetails.getUsername());
 		}
 		
 		if(userDetails!=null && 
@@ -48,5 +51,11 @@ public class JwtAuthenticationTokenFilter  extends OncePerRequestFilter{
 			}
 		}
 		filterChain.doFilter(request, response);
+	}
+	
+	private void propagateUserIdentity(String username) {
+		RequestContext context = RequestContext.getCurrentContext();
+		HttpServletRequest request = context.getRequest();
+		context.addZuulRequestHeader("username", username);
 	}
 }
