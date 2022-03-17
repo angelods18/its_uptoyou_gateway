@@ -13,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +38,9 @@ public class AuthenticationController {
 	private JwtTokenUtil jwtTokenUtil;
 	
 	@Autowired
+	PasswordEncoder passwordEncoder;
+	
+	@Autowired
 	private UserDetailsService userDetailsService;
 	
 	@RequestMapping(value = "public/login", method = RequestMethod.POST)
@@ -58,11 +62,16 @@ public class AuthenticationController {
 		
 		final UserDetails userDetails =
 				userDetailsService.loadUserByUsername(authRequest.getUsername());
-		final String token = jwtTokenUtil.generateToken(userDetails);
-		System.out.println(token);
-		response.setHeader(tokenHeader, token);
-		return ResponseEntity.ok(
-				new JwtAuthenticationResponse(userDetails.getUsername(), userDetails.getAuthorities(), token));
+		if(passwordEncoder.matches(authRequest.getPassword(), userDetails.getPassword())){
+			final String token = jwtTokenUtil.generateToken(userDetails);
+			System.out.println(token);
+			response.setHeader(tokenHeader, token);
+			return ResponseEntity.ok(
+					new JwtAuthenticationResponse(userDetails.getUsername(), userDetails.getAuthorities(), token));
+		}else {
+			return ResponseEntity.badRequest().build();
+		}
+		
 		
 	}
 	
