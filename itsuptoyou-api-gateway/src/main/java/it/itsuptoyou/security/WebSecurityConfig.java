@@ -86,6 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.permitAll()
 			.antMatchers("/public/**").permitAll()
 			.antMatchers("/management-service/public/**").permitAll()	//definire per quali url serve l'autenticazione e per quali no
+			.antMatchers("/ecological_behav_management/public/**").permitAll()
 			.anyRequest().authenticated();
 		
 		http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
