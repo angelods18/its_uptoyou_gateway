@@ -85,8 +85,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                         "/**/*.js")
 			.permitAll()
 			.antMatchers("/public/**").permitAll()
-			.antMatchers("/management-service/public/**").permitAll()	//definire per quali url serve l'autenticazione e per quali no
-			.antMatchers("/ecological_behav_management/public/**").permitAll()
+			.antMatchers("/management-service/public/**",
+					"/management-service/swagger-resources/**",
+			        "/management-service/swagger-ui.html",
+			        "/management-service/v2/api-docs",
+			        "/management-service/webjars/**",
+			        "/management-service/swagger/**").permitAll()	//definire per quali url serve l'autenticazione e per quali no
+			.antMatchers("/ecological-behav-management/public/**",
+					"/ecological-behav-management/swagger-resources/**",
+			        "/ecological-behav-management/swagger-ui.html",
+			        "/ecological-behav-management/v2/api-docs",
+			        "/ecological-behav-management/webjars/**",
+			        "/ecological-behav-management/swagger/**").permitAll()
 			.anyRequest().authenticated();
 		
 		http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
