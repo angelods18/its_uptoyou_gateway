@@ -40,6 +40,7 @@ public class JwtAuthenticationTokenFilter  extends OncePerRequestFilter{
 			authToken=jwtTokenUtil.trimToken(authToken);
 			userDetails = jwtTokenUtil.getUserDetails(authToken);
 			propagateUserIdentity(userDetails.getUsername());
+			propagateToken(authToken);
 		}
 		
 		if(userDetails!=null && 
@@ -57,5 +58,11 @@ public class JwtAuthenticationTokenFilter  extends OncePerRequestFilter{
 		RequestContext context = RequestContext.getCurrentContext();
 		HttpServletRequest request = context.getRequest();
 		context.addZuulRequestHeader("username", username);
+	}
+	
+	private void propagateToken(String token) {
+		RequestContext context = RequestContext.getCurrentContext();
+		HttpServletRequest request = context.getRequest();
+		context.addZuulRequestHeader("token", token);
 	}
 }
